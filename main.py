@@ -3,6 +3,7 @@ from tkinter import messagebox
 import numpy as np
 import subprocess
 import sys
+import matplotlib.pyplot as plt
 
 # Ensure matplotlib is installed
 try:
@@ -14,65 +15,98 @@ except ImportError:
     print("Matplotlib installed successfully!")
 
 
-
 def hawk_dove_game(V, C, population_size=100, generations=50):
     """
-    Simulates the Hawk-Dove Game to explore stable evolutionary strategies.
+    Simule le jeu Aigle-Colombe pour explorer les stratégies évolutives stables.
 
     Parameters:
-        V (float): Value of the resource.
-        C (float): Cost of fighting.
-        population_size (int): Total size of the population.
-        generations (int): Number of generations to simulate.
+        V (float): Valeur de la ressource.
+        C (float): Coût du combat.
+        population_size (int): Taille totale de la population.
+        generations (int): Nombre de générations à simuler.
 
     Returns:
-        history (list): Fraction of Hawks in the population over time.
+        history (list): Fraction des Aigles dans la population au fil du temps.
+        payoff_matrix (ndarray): La matrice de payoff après toutes les interactions.
     """
-    # Initialize population with random fractions of Hawks (1) and Doves (0)
-    hawk_fraction = np.random.rand()
-    history = [hawk_fraction]
+    # Initialiser la population avec des fractions aléatoires d'Aigles (1) et de Colombes (0)
+    population = np.random.choice([0, 1], size=population_size)  # 0 = Colombe, 1 = Aigle
+    history = [np.mean(population)]  # Suivre la fraction des Aigles
+    
+    # Créer une matrice vide pour les payoffs
+    payoff_matrix = np.zeros((2, 2))  # [Aigle, Colombe], [Aigle, Aigle], etc.
 
     for _ in range(generations):
-        # Compute payoffs
-        hawk_hawk_payoff = (V - C) / 2 if C > V else 0
-        hawk_dove_payoff = V
-        dove_hawk_payoff = 0
-        dove_dove_payoff = V / 2
+        # Simuler le jeu entre toutes les paires d'individus
+        for i in range(population_size):
+            for j in range(i + 1, population_size):  # Éviter les paires répétées
+                if population[i] == 1 and population[j] == 1:  # Aigle vs Aigle
+                    payoff_matrix[1, 1] += (V - C) / 2 if C > V else 0
+                elif population[i] == 1 and population[j] == 0:  # Aigle vs Colombe
+                    payoff_matrix[1, 0] += V
+                elif population[i] == 0 and population[j] == 1:  # Colombe vs Aigle
+                    payoff_matrix[0, 1] += V
+                elif population[i] == 0 and population[j] == 0:  # Colombe vs Colombe
+                    payoff_matrix[0, 0] += V / 2
 
-        # Average payoffs for Hawks and Doves
-        hawk_payoff = hawk_fraction * hawk_hawk_payoff + (1 - hawk_fraction) * hawk_dove_payoff
-        dove_payoff = hawk_fraction * dove_hawk_payoff + (1 - hawk_fraction) * dove_dove_payoff
-
-        # Fitness is proportional to payoffs
-        total_fitness = hawk_fraction * hawk_payoff + (1 - hawk_fraction) * dove_payoff
-        hawk_fraction = (hawk_fraction * hawk_payoff) / total_fitness
-        
-        # Record the fraction of Hawks in the population
+        # Calculer la fraction des Aigles
+        hawk_fraction = np.mean(population)
         history.append(hawk_fraction)
 
-    return history
+        # Mettre à jour la population basée sur les payoffs
+        # Calcul de la fitness (simplifiée)
+        fitness = np.array([payoff_matrix[population[i], population[j]] for i in range(population_size) for j in range(population_size)])
+        population = np.random.choice([0, 1], size=population_size, p=[1 - hawk_fraction, hawk_fraction])  # Mise à jour de la population en fonction de la fitness
+
+    return history, payoff_matrix
 
 
 def plot_hawk_dove(history):
     """
-    Plots the results of the Hawk-Dove game simulation.
+    Trace les résultats de la simulation du jeu Aigle-Colombe.
 
     Parameters:
-        history (list): Fraction of Hawks in the population over time.
+        history (list): Fraction des Aigles dans la population au fil du temps.
     """
     plt.figure(figsize=(10, 6))
-    plt.plot(history, label="Fraction of Hawks")
-    plt.axhline(0.5, color='r', linestyle='--', label="ESS Threshold")
-    plt.xlabel("Generations")
-    plt.ylabel("Fraction of Hawks")
-    plt.title("Hawk-Dove Game: Evolution of Strategies")
+    plt.plot(history, label="Fraction des Aigles")
+    plt.axhline(0.5, color='r', linestyle='--', label="Seuil ESS")
+    plt.xlabel("Générations")
+    plt.ylabel("Fraction des Aigles")
+    plt.title("Jeu Aigle-Colombe : Évolution des stratégies")
     plt.legend()
+    plt.show()
+
+
+def display_payoff_matrix(payoff_matrix):
+    """
+    Affiche la matrice de payoff.
+
+    Parameters:
+        payoff_matrix (ndarray): La matrice de payoff.
+    """
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.matshow(payoff_matrix, cmap="Blues")
+
+    for i in range(2):
+        for j in range(2):
+            ax.text(j, i, f"{payoff_matrix[i, j]:.2f}", ha='center', va='center', color="white")
+    
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+    ax.set_xticklabels(['Colombe', 'Aigle'])
+    ax.set_yticklabels(['Colombe', 'Aigle'])
+
+    ax.set_xlabel('Joueur 2')
+    ax.set_ylabel('Joueur 1')
+    ax.set_title('Matrice des payoffs')
+
     plt.show()
 
 
 def run_simulation():
     """
-    Runs the Hawk-Dove simulation with parameters from the GUI.
+    Exécute la simulation du jeu Aigle-Colombe avec les paramètres de l'IHM.
     """
     try:
         # Récupération des valeurs saisies
@@ -85,25 +119,29 @@ def run_simulation():
         if V <= 0 or C <= 0 or population_size <= 0 or generations <= 0:
             raise ValueError("Toutes les valeurs doivent être positives.")
 
-        # Appel de la fonction de simulation
-        history = hawk_dove_game(V, C, population_size, generations)
+        # Exécution de la simulation
+        history, payoff_matrix = hawk_dove_game(V, C, population_size, generations)
 
         # Affichage des résultats
         plot_hawk_dove(history)
+
+        # Affichage de la matrice de payoffs
+        display_payoff_matrix(payoff_matrix)
+
     except ValueError as e:
         messagebox.showerror("Erreur", f"Entrée invalide : {e}")
 
 
 # Création de l'IHM
 root = tk.Tk()
-root.title("Simulation du jeu Hawk-Dove")
+root.title("Simulation du jeu Aigle-Colombe")
 
 # Labels et champs de saisie
 tk.Label(root, text="Valeur de la ressource (V)").grid(row=0, column=0, padx=10, pady=5)
 entry_value = tk.Entry(root)
 entry_value.grid(row=0, column=1, padx=10, pady=5)
 
-tk.Label(root, text="Coût de la lutte (C)").grid(row=1, column=0, padx=10, pady=5)
+tk.Label(root, text="Coût du combat (C)").grid(row=1, column=0, padx=10, pady=5)
 entry_cost = tk.Entry(root)
 entry_cost.grid(row=1, column=1, padx=10, pady=5)
 
@@ -119,5 +157,5 @@ entry_generations.grid(row=3, column=1, padx=10, pady=5)
 btn_run = tk.Button(root, text="Exécuter la simulation", command=run_simulation)
 btn_run.grid(row=4, column=0, columnspan=2, pady=20)
 
-# Boucle principale de l'IHM
+# Boucle principale
 root.mainloop()
