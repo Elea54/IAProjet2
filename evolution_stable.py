@@ -5,7 +5,7 @@ import subprocess
 import sys
 import matplotlib.pyplot as plt
 
-# Ensure matplotlib is installed
+# Installe automatiquement matplotlib
 try:
     import matplotlib.pyplot as plt
 except ImportError:
