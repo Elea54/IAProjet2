@@ -40,7 +40,7 @@ Après avoir run le fichier `evolution_stable.py`, vous pouvez remplir l'**inter
 
 ### **Exemple d'interface graphique**
 
-<img src="image.png" alt="Interface graphique" width="300"/>
+<img src="images/image.png" alt="Interface graphique" width="300"/>
 
 ---
 
@@ -100,7 +100,7 @@ Pour exécuter le fichier `modele_demo_proie_predateur.py`, vous devez remplir l
 
 ### **Exemple d'interface graphique**
 
-<img src="img.png" alt="Interface graphique" width="400"/>
+<img src="images/img.png" alt="Interface graphique" width="400"/>
 
 ---
 
