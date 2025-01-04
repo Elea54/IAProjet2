@@ -138,6 +138,7 @@ Les individus de rang élevé (subordonnés) doivent fréquemment engager des co
 
 Intérêt :
 Cette dynamique est directement inspirée des interactions observées dans des systèmes biologiques tels que les groupes sociaux d’animaux (par exemple, meutes de loups, groupes de primates), où la hiérarchie a des implications sur l’accès aux ressources, aux partenaires, ou sur la survie.
+
 2. Coûts cumulés
 
 Les combats ne sont pas gratuits. Chaque affrontement impose un coût (énergie, blessures, etc.), ce qui limite les capacités des individus à interagir fréquemment ou à maintenir une position dominante.
@@ -148,7 +149,6 @@ Dans la simulation :
     Les coûts peuvent empêcher les individus de participer activement à des interactions,
     Les individus incapables de compenser leurs coûts deviennent "inactifs" ou "meurent" dans le modèle.
 
-Intérêt :
 Les coûts cumulés introduisent une contrainte réaliste, obligeant les individus à équilibrer leur agressivité avec leurs capacités à supporter les coûts.
 3. Capacités de combat
 
@@ -159,7 +159,7 @@ La capacité de combat est une mesure de la "force" d’un individu dans une int
 
 Les capacités de combat fluctuent donc en fonction des interactions, créant des cycles dynamiques d'évolution au sein de la population.
 
-Intérêt :
+
 La modélisation des capacités de combat permet d'étudier des comportements compétitifs tels que la prise de risques, la gestion de l'énergie, ou la stratégie passive pour éviter les conflits.
 Fonctionnement de la simulation
 Paramètres principaux
@@ -173,7 +173,7 @@ Paramètres principaux
 Visualisations et interprétations
 1. Évolution des rangs de dominance
 
-    Interprétation : Ce graphique montre la position hiérarchique de chaque individu au fil des générations.
+    Le premier graphique montre la position hiérarchique de chaque individu au fil des générations.
     Observations possibles :
         Les individus dominants (rangs proches de 0) tendent à stabiliser leur position rapidement.
         Les individus de rangs intermédiaires subissent des fluctuations importantes, témoignant d’une compétition active.
@@ -181,7 +181,7 @@ Visualisations et interprétations
 
 2. Évolution des coûts cumulés
 
-    Interprétation : Ce graphique illustre la charge cumulée pour chaque individu en termes de coûts associés aux interactions.
+    Le second graphique illustre la charge cumulée pour chaque individu en termes de coûts associés aux interactions.
     Observations possibles :
         Les individus inactifs (ceux qui n'interagissent pas) voient leurs coûts stagner.
         Les individus engagés dans des combats fréquents accumulent rapidement des coûts, ce qui peut mener à leur disparition.
@@ -189,7 +189,7 @@ Visualisations et interprétations
 
 3. Évolution des capacités de combat
 
-    Interprétation : Ce graphique montre comment la force relative des individus change au fil du temps.
+    Le dernier graphique montre comment la force relative des individus change au fil du temps.
     Observations possibles :
         Les individus dominants conservent souvent des capacités de combat élevées.
         Les capacités peuvent chuter brutalement suite à des défaites successives, entraînant des changements de rang significatifs.
