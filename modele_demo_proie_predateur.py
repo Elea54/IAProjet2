@@ -63,16 +63,19 @@ def lotka_volterra_with_payoff(alpha, beta, delta, gamma, prey_init, predator_in
 
     return prey_history, predator_history, payoff_matrix
 
-# Affichage de la matrice des payoffs
+# Affichage de la matrice des payoffs avec mise en couleur
 def display_payoff_matrix(matrix):
     """
-    Affiche la matrice de payoffs.
+    Affiche la matrice de payoffs avec mise en couleur.
 
     Parameters:
         matrix (ndarray): La matrice des payoffs.
     """
     fig, ax = plt.subplots(figsize=(5, 5))
-    ax.matshow(matrix, cmap="Blues")
+    cax = ax.matshow(matrix, cmap="coolwarm")  # Utilisation d'un colormap coolwarm pour un dégradé de couleurs
+
+    # Ajouter la barre de couleur pour montrer l'échelle
+    fig.colorbar(cax)
 
     for i in range(2):
         for j in range(2):

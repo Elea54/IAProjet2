@@ -5,7 +5,7 @@ import subprocess
 import sys
 import matplotlib.pyplot as plt
 
-# Ensure matplotlib is installed
+# Installe automatiquement matplotlib
 try:
     import matplotlib.pyplot as plt
 except ImportError:
@@ -27,38 +27,55 @@ def hawk_dove_game(V, C, population_size=100, generations=50):
 
     Returns:
         history (list): Fraction des Aigles dans la population au fil du temps.
-        payoff_matrix (ndarray): La matrice de payoff après toutes les interactions.
+        payoff_matrix (ndarray): La matrice de payoff moyenne après toutes les interactions.
     """
     # Initialiser la population avec des fractions aléatoires d'Aigles (1) et de Colombes (0)
     population = np.random.choice([0, 1], size=population_size)  # 0 = Colombe, 1 = Aigle
     history = [np.mean(population)]  # Suivre la fraction des Aigles
-    
+
     # Créer une matrice vide pour les payoffs
-    payoff_matrix = np.zeros((2, 2))  # [Aigle, Colombe], [Aigle, Aigle], etc.
+    payoff_matrix = np.zeros((2, 2))  # [Aigle vs Colombe, Aigle vs Aigle, etc.]
 
     for _ in range(generations):
+        # Réinitialiser la matrice des payoffs pour cette génération
+        current_payoffs = np.zeros((2, 2))
+
         # Simuler le jeu entre toutes les paires d'individus
         for i in range(population_size):
             for j in range(i + 1, population_size):  # Éviter les paires répétées
                 if population[i] == 1 and population[j] == 1:  # Aigle vs Aigle
-                    payoff_matrix[1, 1] += (V - C) / 2 if C > V else 0
+                    payoff = (V / 2) - (C / 2)
+                    current_payoffs[1, 1] += payoff
                 elif population[i] == 1 and population[j] == 0:  # Aigle vs Colombe
-                    payoff_matrix[1, 0] += V
+                    current_payoffs[1, 0] += V
                 elif population[i] == 0 and population[j] == 1:  # Colombe vs Aigle
-                    payoff_matrix[0, 1] += V
+                    current_payoffs[0, 1] += V
                 elif population[i] == 0 and population[j] == 0:  # Colombe vs Colombe
-                    payoff_matrix[0, 0] += V / 2
+                    payoff = V / 2
+                    current_payoffs[0, 0] += payoff
+
+        # Normaliser la matrice des payoffs
+        total_interactions = population_size * (population_size - 1) / 2
+        payoff_matrix = current_payoffs / total_interactions
 
         # Calculer la fraction des Aigles
         hawk_fraction = np.mean(population)
         history.append(hawk_fraction)
 
-        # Mettre à jour la population basée sur les payoffs
-        # Calcul de la fitness (simplifiée)
-        fitness = np.array([payoff_matrix[population[i], population[j]] for i in range(population_size) for j in range(population_size)])
-        population = np.random.choice([0, 1], size=population_size, p=[1 - hawk_fraction, hawk_fraction])  # Mise à jour de la population en fonction de la fitness
+        # Mettre à jour la population basée sur les payoffs moyens
+        fitness = np.zeros(population_size)
+        for i in range(population_size):
+            if population[i] == 1:  # Aigle
+                fitness[i] = hawk_fraction * payoff_matrix[1, 1] + (1 - hawk_fraction) * payoff_matrix[1, 0]
+            else:  # Colombe
+                fitness[i] = hawk_fraction * payoff_matrix[0, 1] + (1 - hawk_fraction) * payoff_matrix[0, 0]
+
+        # Mise à jour de la population en fonction de la fitness
+        fitness /= np.sum(fitness)  # Normaliser les fitness pour les probabilités
+        population = np.random.choice([0, 1], size=population_size, p=[1 - hawk_fraction, hawk_fraction])
 
     return history, payoff_matrix
+
 
 
 def plot_hawk_dove(history):
@@ -90,7 +107,12 @@ def display_payoff_matrix(payoff_matrix):
 
     for i in range(2):
         for j in range(2):
-            ax.text(j, i, f"{payoff_matrix[i, j]:.2f}", ha='center', va='center', color="white")
+            # Définir la couleur du texte en fonction de la valeur du payoff
+            value = payoff_matrix[i, j]
+            text_color = "black" if value < 1 else "white"  # Si la valeur est faible, le texte sera noir
+            
+            # Afficher la valeur avec la couleur appropriée
+            ax.text(j, i, f"{value:.2f}", ha='center', va='center', color=text_color)
     
     ax.set_xticks([0, 1])
     ax.set_yticks([0, 1])
@@ -102,6 +124,7 @@ def display_payoff_matrix(payoff_matrix):
     ax.set_title('Matrice des payoffs')
 
     plt.show()
+
 
 
 def run_simulation():
