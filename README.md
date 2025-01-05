@@ -55,7 +55,7 @@ La simulation génère deux visualisations :
 
 ---
 
-## **Sous-Sujet : Modèle Proie-Prédateur avec Matrice de Payoffs**
+## **Sous-Sujet : Modèle Proie-Prédateur**
 ### Basé sur le modèle de Lotka-Volterra
 
 **Fichier Python correspondant :** `modele_demo_proie_predateur.py`
