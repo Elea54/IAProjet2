@@ -222,3 +222,58 @@ Stabilité des dominants : Les individus dominants (meilleurs rangs) atteignent 
 Volatilité des subordonnés : Les individus dans les rangs intermédiaires subissent les fluctuations les plus importantes, illustrant une compétition féroce dans la lutte pour la domination.
 Coût de la compétition : Maintenir une position dominante ou intermédiaire implique un coût énergétique important. Ce coût peut limiter la capacité d’un individu à interagir ou le condamner à disparaître.
 Équilibre dynamique : La population tend vers un équilibre où seuls les individus les plus adaptés survivent et prospèrent.
+
+
+
+## **Sous-Sujet 4 : La théorie des jeux du comportement des choucas**
+
+### **Fichier Python correspondant :** `choucas_comportement.py`
+
+### **Résumé**
+Ce sous-sujet explore le comportement des **choucas** (Corvus monedula) en utilisant un modèle de théorie des jeux. Les interactions entre les mâles et les femelles sont modélisées à travers des stratégies comportementales basées sur des matrices de gains distinctes pour chaque sexe. 
+
+Les stratégies comportementales sont les suivantes :
+- **Mâles** : 
+  - **Consolation** : Stratégie où le mâle s’engage dans une interaction pacifique.
+  - **Évitement** : Stratégie où le mâle évite tout conflit, privilégiant la tranquillité.
+  
+- **Femelles** : 
+  - **Signalement** : Stratégie où la femelle signale sa présence ou ses besoins.
+  - **Neutralité** : Stratégie où la femelle reste passive, sans signaler de besoin particulier.
+
+Les interactions entre ces stratégies génèrent des gains ou des pertes qui influencent l’évolution des comportements au fil des générations.
+
+---
+
+### **Démarrage de la simulation**
+Pour exécuter le fichier `choucas_comportement.py`, vous devez remplir l'**interface graphique** avec les matrices de gains suivantes pour les mâles et les femelles :
+
+1. **Matrice de gains des mâles :**
+    - **Gains pour le mâle (Consolation vs Signalement)**
+    - **Gains pour le mâle (Consolation vs Neutralité)**
+    - **Gains pour le mâle (Évitement vs Signalement)**
+    - **Gains pour le mâle (Évitement vs Neutralité)**
+
+2. **Matrice de gains des femelles :**
+    - **Gains pour la femelle (Signalement vs Consolation)**
+    - **Gains pour la femelle (Signalement vs Évitement)**
+    - **Gains pour la femelle (Neutralité vs Consolation)**
+    - **Gains pour la femelle (Neutralité vs Évitement)**
+
+---
+
+### **Visualisation des résultats**
+La simulation génère deux visualisations principales :
+
+1. **Évolution des stratégies** :  
+   Un graphique montrant la proportion de chaque stratégie (Consolation, Évitement, Signalement, Neutralité) dans la population au fil des simulations.
+
+2. **Distribution finale des stratégies** :  
+   Un graphique en barres représentant la proportion finale de chaque stratégie adoptée par les mâles et les femelles.
+
+---
+
+### **Analyse des résultats**
+La simulation permet d'analyser l’évolution des comportements des choucas en fonction des matrices de gains. Les résultats peuvent montrer comment certaines stratégies dominent dans certaines conditions, ou comment un équilibre dynamique se forme entre les mâles et les femelles. L’évolution des proportions de chaque stratégie dans la population révèle des comportements adaptatifs et des cycles de coopération ou de compétition entre les individus.
+
+---
